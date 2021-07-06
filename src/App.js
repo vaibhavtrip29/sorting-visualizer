@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import BubbleSort from './algorithms/BS';
+import InsertionSort from './algorithms/IS';
+import SelectionSort from './algorithms/SS';
+import MergeSort from './algorithms/MS';
 import Play from '@material-ui/icons/PlayCircleOutlineRounded';
 import Forwards from '@material-ui/icons/SkipNextRounded';
 import Backward from '@material-ui/icons/SkipPreviousRounded';
@@ -18,10 +21,14 @@ class App extends Component {
     delay: 100,
     algorithm: 'Bubble Sort',
     timeouts: [],
+    value: 'Bubble Sort'
   };
 
   ALGORITHMS = {
     'Bubble Sort': BubbleSort,
+    'Insertion Sort': InsertionSort,
+    'Selection Sort': SelectionSort,
+    'Merge Sort': MergeSort,
   }
 
 componentDidMount() {
@@ -33,13 +40,26 @@ generateSteps = () => {
   let steps = this.state.arraySteps.slice();
   let colorSteps = this.state.colorSteps.slice();
 
-  this.ALGORITHMS[this.state.algorithm](array, 0, steps, colorSteps);
+  this.ALGORITHMS[this.state.algorithm](array, 0, this.state.count, steps, colorSteps);
 
   this.setState({
     arraySteps: steps,
     colorSteps: colorSteps
   })
 
+}
+
+handleChange = (event) => {
+  this.setState({
+    value: event.target.value,
+    algorithm: event.target.value,
+  });
+  this.generateRandomArray();
+}
+
+handleSubmit = (event) => {
+  alert("Your algorithm is: " + this.state.algorithm);
+  event.preventDefault();
 }
 
   clearTimeouts = () => {
@@ -171,9 +191,18 @@ generateSteps = () => {
     return (
     <div className='app'>
       <h1 className='App'>Sorting Algorithms</h1>
-      <div className="button">
-        <buutton>Algorithms</buutton>
-      </div>
+        <div className="button">
+          <label>
+            Pick your algorithm:
+          <select value={this.state.value} onChange={this.handleChange}>
+              <option value='Bubble Sort'>Bubble Sort</option>
+              <option value='Heap Sort'>Heap Sort</option>
+              <option value='Insertion Sort'>Insertion Sort</option>
+              <option value='Merge Sort'>Merge Sort</option>
+              <option value='Selection Sort'>Selection Sort</option>
+            </select>
+          </label>
+        </div>
       <div className="frame">
         <div className="barsDiv container card">{bars}</div>
       </div>
